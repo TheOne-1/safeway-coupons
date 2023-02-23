@@ -4,6 +4,7 @@ from http.client import HTTPConnection
 
 from .config import Config
 from .safeway import SafewayCoupons
+import random
 
 
 def _parse_args() -> argparse.Namespace:
@@ -71,6 +72,7 @@ def _parse_args() -> argparse.Namespace:
 def main() -> None:
     args = _parse_args()
     accounts = Config.load_accounts(config_file=args.accounts_config)
+    random.shuffle(accounts)
     if not accounts:
         print("Error: No Safeway account(s) configured", file=sys.stderr)
         sys.exit(1)
@@ -83,11 +85,13 @@ def main() -> None:
         dry_run=args.dry_run,
         max_clip_count=args.max_clip_count,
     )
-    try:
-        for account in accounts:
+    # selected_account = random.sample(accounts, 1)[0]
+    # print(f"selected account: {selected_account.cell}")
+    for account in accounts:
+        try:
             sc.clip_for_account(account)
-    except Exception as e:
-        if args.debug_level:
-            raise
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
+        except Exception as e:
+            if args.debug_level:
+                raise
+            print(f"Error: {e}")
+            # sys.exit(1)

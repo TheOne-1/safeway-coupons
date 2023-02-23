@@ -5,6 +5,7 @@ from typing import Generator, Iterable, TypeVar
 
 T = TypeVar("T")
 
+TARGET_OFFER_NAME = 'Your Grocery Purchase of $5 or More'
 
 WORD_LIST = [
     "almost",

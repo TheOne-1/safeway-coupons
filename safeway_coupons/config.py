@@ -9,29 +9,29 @@ from .accounts import Account
 class Config:
     @classmethod
     def load_accounts(cls, config_file: Optional[str] = None) -> List[Account]:
-        account = cls.load_account_from_env()
-        if account:
-            return [account]
+        # account = cls.load_account_from_env()
+        # if account:
+        #     return [account]
         if config_file:
             accounts = cls.load_accounts_from_config(config_file)
             if accounts:
                 return accounts
         return []
 
-    @classmethod
-    def load_account_from_env(cls) -> Optional[Account]:
-        username = os.environ.get("SAFEWAY_ACCOUNT_USERNAME")
-        password = os.environ.get("SAFEWAY_ACCOUNT_PASSWORD")
-        mail_to = os.environ.get("SAFEWAY_ACCOUNT_MAIL_TO")
-        mail_from = os.environ.get("SAFEWAY_ACCOUNT_MAIL_TO")
-        if username and password:
-            return Account(
-                username=username,
-                password=password,
-                mail_to=mail_to or username,
-                mail_from=mail_from or username,
-            )
-        return None
+    # @classmethod
+    # def load_account_from_env(cls) -> Optional[Account]:
+    #     username = os.environ.get("SAFEWAY_ACCOUNT_USERNAME")
+    #     password = os.environ.get("SAFEWAY_ACCOUNT_PASSWORD")
+    #     mail_to = os.environ.get("SAFEWAY_ACCOUNT_MAIL_TO")
+    #     mail_from = os.environ.get("SAFEWAY_ACCOUNT_MAIL_TO")
+    #     if username and password:
+    #         return Account(
+    #             username=username,
+    #             password=password,
+    #             mail_to=mail_to or username,
+    #             mail_from=mail_from or username,
+    #         )
+    #     return None
 
     @classmethod
     def load_accounts_from_config(cls, config_file: str) -> List[Account]:
@@ -57,6 +57,7 @@ class Config:
                     password=config.get(section, "password"),
                     mail_to=mail_to or username,
                     mail_from=mail_from or username,
+                    cell=config.get(section, "cell"),
                 )
             )
         return accounts
